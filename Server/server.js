@@ -28,7 +28,7 @@ let unReadMessage = 1;
 
 //whenever new user is connected (built in connection detects some new user// disconnect when user left)
 io.on('connection', (socket)=>{
-
+    
      // Handle new user connection
     socket.on('join', (newUser, avatar)=>{
         const data = {
@@ -38,7 +38,7 @@ io.on('connection', (socket)=>{
         // Add the user to the connected users list
         connectedUsers[socket.id] = data;
     });
-    
+
     // emit the updated list of connected users to all clients
     io.emit('activeUsers', Object.values(connectedUsers));
 
