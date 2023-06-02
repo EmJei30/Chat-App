@@ -43,7 +43,7 @@ const Active_List = ({user, roomSelected, currentRoomUsers}) =>{
                             <img src = {user.avatar} alt=''/>
                         </div>
                         <div className="activeName">
-                            {newUser === user.user ? <p>{user.user} (you)</p> : <p>{user.user}</p> }
+                            {newUser === user.user ? <p>{user.user} ( you )</p> : <p>{user.user}</p> }
                         </div>
                     </div>
                 ))};
@@ -62,7 +62,7 @@ const Active_List = ({user, roomSelected, currentRoomUsers}) =>{
                                 <img src = {roomUser.avatar} alt=''/>
                             </div>
                             <div className="roomActiveName">
-                                {newUser === roomUser.user ? <p>{roomUser.user} (you)</p> : <p>{roomUser.user}</p> }
+                                {newUser === roomUser.user ? <p>{roomUser.user} ( you )</p> : <p>{roomUser.user}</p> }
                             </div>
                         </div>
                     ))}
