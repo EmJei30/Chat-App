@@ -39,7 +39,7 @@ const Register = () =>{
         setName('');
         setEmail('');
         setPassword('');
-        }
+    }
     return (
         <div className='registerForm'>
             <div className='header'>

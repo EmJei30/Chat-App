@@ -39,11 +39,10 @@ const Login = () =>{
             }, 2000);
           
         }
-    
         // Reset the form
         setEmail('');
         setPassword('');
-      };
+    };
     
     return (
         <div className="Login">
