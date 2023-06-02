@@ -37,8 +37,8 @@ io.on('connection', (socket)=>{
         };
         // Add the user to the connected users list
         connectedUsers[socket.id] = data;
-
     });
+    
     // emit the updated list of connected users to all clients
     io.emit('activeUsers', Object.values(connectedUsers));
 
