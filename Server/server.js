@@ -28,7 +28,7 @@ let unReadMessage = 1;
 
 //whenever new user is connected (built in connection detects some new user// disconnect when user left)
 io.on('connection', (socket)=>{
-    
+
      // Handle new user connection
     socket.on('join', (newUser, avatar)=>{
         const data = {
@@ -76,7 +76,7 @@ io.on('connection', (socket)=>{
         io.emit('chatRooms', {room: chatRooms, id: currentRoomId}); // Broadcast the updated chat rooms list to all clients
   });
 
-/**------------------------join, leave and emit room conversation history selected room---------------------- */
+/**----------------------join, leave and emit room conversation history selected room-------------------- */
     //handle the joinRoom event
     socket.on('joinRoom', (roomId, username, avatar)=>{
         socket.join(roomId);
