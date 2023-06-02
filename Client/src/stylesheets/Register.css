@@ -1,0 +1,94 @@
+*{
+    box-sizing: border-box;
+}
+.registerForm{
+    width: 40%;
+    height: 380px;
+    margin: 0px auto;
+    margin-top: 100px;
+    border-radius: 15px;
+    background-color: rgb(40, 37, 37, .9);
+    color: white;
+}
+.registerForm .header{
+    width: 100%;
+    height: 18%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.name_con, .email_con, .pass_con{
+    width: 100%;
+    height: 18%;
+    display: flex;
+}
+
+.signUpBtn{
+    width: 60%;
+    text-align: center;
+    color: white;
+}
+.loginBtn{
+    color: white;
+}
+.name_label, .label_email, .label_pass {
+    width: 30%;
+    height: 80%;
+}
+.name_input, .input_email,  .input_pass{
+    width: 70%;
+    height: 80%;
+}
+label{
+    width: 100%;
+    height: 50%;
+    margin-left: 30px;
+    margin-top: 10px;
+    text-align: center;
+    color: white;
+}
+input{
+    width: 80%;
+    height: 70%;
+    border-radius: 10px;
+    background-color: rgb(40, 37, 37);
+    color: white;
+    box-shadow: none;
+}
+.submit_con{
+    width: 100%;
+    height: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+.submit_con button{
+    width: 30%;
+    height: 60%;
+    border-radius: 15px;
+    cursor: pointer;
+    background-color: rgb(40, 37, 37);
+    color: white;
+}
+.submit_con button:hover{
+    font-weight: bold;
+    background-color: rgb(243, 237, 237);
+    color: rgb(11, 10, 10);
+}
+.Notification_message{
+    position: absolute;
+    width: 20%;
+    height: 10%;
+    bottom: 620px;
+    left: 40%;
+    border-radius: 15px;
+}
+.success{
+    background-color: rgb(66, 186, 150);
+    color: white;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
