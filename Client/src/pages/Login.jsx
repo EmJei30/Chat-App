@@ -66,7 +66,7 @@ const Login = () =>{
                 </div>   
             </form>
             {Notification &&
-                <div className={`Notification_message ${isError ? 'success': 'error'}`}>
+                <div className={`Notification_message_login ${isError ? 'success': 'error'}`}>
                     <p>{Notification}</p>
             </div>
             }   

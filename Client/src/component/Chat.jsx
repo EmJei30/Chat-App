@@ -105,79 +105,78 @@ const Chat = () => {
             setRoomSelectedName(data.roomName);
             setRooms(data.chatRooms);
     };
-
-      return (
-        <>
-            <div className='container'>
-                <div className='chat_history'>
-                    <ChatRooms sendData = {handleData} roomSelected = {roomSelected} />
-                </div>
-                <div className='chat'>
-                    <div className='chat_header'>
-                        <div className="chat_icon">
-                            <img src = {avatar} alt =''/>
-                        </div>
-                        <div className="chat_name">
-                            {user}    
-                        </div>
-                        <div className='option'>
-                            <button type="submit" onClick={handleLeaveRoom}>Leave Room</button>
-                            <button type="submit" onClick={handleLogOut}>Log out</button>
-                        </div>
-                    </div>
-                    {roomSelected && rooms.length > 0  ?
-                        <>
-                            <div className='conversation'>
-                                <div className='header'>
-                                    <h2>Conversation in Room: {roomSelectedName}</h2>
-                                </div>
-                                <div className='messageContainer'>
-                                {notification && <div className='notification'>{notification}</div>}
-                                <ScrollToBottom className='scroll'>
-                                    {conversations.map((message, index)=>(
-                                            <div className={`message ${user === message.user ? 'sender':''}`} key = {index}>
-                                                <div className='userContainert'>
-                                                    <p className='user'>{message.user}</p>
-                                                </div>
-                                                <div className='msgContainer'>
-                                                    <p className='text'>{message.msg}</p>
-                                                </div>
-                                                <div className='timeContainer'>
-                                                    {message.time}
-                                                </div>
-                                            </div>
-                                ))}
-                                </ScrollToBottom>
-                                </div>
-                            </div>
-                            <div className='input_container'>
-                                <form onSubmit={sendMessage}>
-                                    <input type ="text" value={newMessage} onChange={(e)=>setNewMessage(e.target.value)}/>
-                                    <button type="submit">Send</button>
-                                </form>
-                            </div>
-                        </>
-                    :
-                    <div className='welcome'>
-                        <div className='welcome_msg'>
-                            <div>
-                                <h1>Welcome {user}</h1> 
-                                <h3>Join the chat now</h3> 
-                                <h3>or you can create your own chat room.</h3> 
-                            </div>            
-                        </div>
-                       <div className='welcome_img'>
-                            <img src ={welcome} alt =''/>
-                       </div>
-                    </div>
-                    }
-                </div>
-                <div className='contact_list'>
-                    <Active_List  user = {user} roomSelected = {roomSelected} currentRoomUsers = {currentRoomUsers}/>
-                </div>
+    return (
+    <>
+        <div className='container'>
+            <div className='chat_history'>
+                <ChatRooms sendData = {handleData} roomSelected = {roomSelected} user = {user}/>
             </div>
-        </>
-      );
-    }
-    
-    export default Chat;
+            <div className='chat'>
+                <div className='chat_header'>
+                    <div className="chat_icon">
+                        <img src = {avatar} alt =''/>
+                    </div>
+                    <div className="chat_name">
+                        {user}    
+                    </div>
+                    <div className='option'>
+                        <button type="submit" onClick={handleLeaveRoom}>Leave Room</button>
+                        <button type="submit" onClick={handleLogOut}>Log out</button>
+                    </div>
+                </div>
+                {roomSelected && rooms.length > 0  ?
+                    <>
+                        <div className='conversation'>
+                            <div className='header'>
+                                <h2>Conversation in Room: {roomSelectedName}</h2>
+                            </div>
+                            <div className='messageContainer'>
+                            {notification && <div className='notification'>{notification}</div>}
+                            <ScrollToBottom className='scroll'>
+                                {conversations.map((message, index)=>(
+                                        <div className={`message ${user === message.user ? 'sender':''}`} key = {index}>
+                                            <div className='userContainert'>
+                                                <p className='user'>{message.user}</p>
+                                            </div>
+                                            <div className='msgContainer'>
+                                                <p className='text'>{message.msg}</p>
+                                            </div>
+                                            <div className='timeContainer'>
+                                                {message.time}
+                                            </div>
+                                        </div>
+                            ))}
+                            </ScrollToBottom>
+                            </div>
+                        </div>
+                        <div className='input_container'>
+                            <form onSubmit={sendMessage}>
+                                <input type ="text" value={newMessage} onChange={(e)=>setNewMessage(e.target.value)}/>
+                                <button type="submit">Send</button>
+                            </form>
+                        </div>
+                    </>
+                :
+                <div className='welcome'>
+                    <div className='welcome_msg'>
+                        <div>
+                            <h1>Welcome {user}</h1> 
+                            <h3>Join the chat now</h3> 
+                            <h3>or you can create your own chat room.</h3> 
+                        </div>            
+                    </div>
+                    <div className='welcome_img'>
+                        <img src ={welcome} alt =''/>
+                    </div>
+                </div>
+                }
+            </div>
+            <div className='contact_list'>
+                <Active_List  user = {user} roomSelected = {roomSelected} currentRoomUsers = {currentRoomUsers}/>
+            </div>
+        </div>
+    </>
+    );
+}
+
+export default Chat;
