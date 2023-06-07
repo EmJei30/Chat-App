@@ -69,7 +69,7 @@ const Active_List = ({user, roomSelected, currentRoomUsers}) =>{
                     </div>
                 </div>
             } 
-            </div>
+        </div>
         </>
     );
 }

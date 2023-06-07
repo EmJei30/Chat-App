@@ -18,10 +18,10 @@ const Chat = () => {
     const [notification, setNotification] = useState('');
     const [avatar, setAvatar] = useState('');
     const [currentRoomUsers, setCurrentRoomUsers] = useState([]);
-    
     const navigate = useNavigate();
+    
     useEffect(()=>{
-        let name = sessionStorage.getItem('name');
+        let name = sessionStorage.getItem('username');
         let id = Math.floor(Math.random() * 5) + 1;
         if(name === "" || name === null){
             navigate('/login');   
@@ -89,7 +89,7 @@ const Chat = () => {
 
     //funtion that handles log out
     const handleLogOut = () =>{
-        sessionStorage.setItem('name',""); 
+        sessionStorage.setItem('username',""); 
         socket.emit('leaveRoom', roomSelected, user);
         navigate('/login');
         window.location.reload();   
@@ -105,6 +105,7 @@ const Chat = () => {
             setRoomSelectedName(data.roomName);
             setRooms(data.chatRooms);
     };
+
     return (
     <>
         <div className='container'>

@@ -3,10 +3,43 @@ const app = express();
 const http = require('http');
 const cors = require('cors');
 const {Server} = require('socket.io');
+const mongoose = require('mongoose');
+const server = http.createServer(app);
+const UsersModel = require('./models/Users');
 
 //uses cors middleware to resolve issues on http request
 app.use(cors());
-const server = http.createServer(app);
+app.use(express.json());
+
+//connect to mongodb database
+mongoose.connect("mongodb://127.0.0.1:27017/chatdb");
+
+//creating route for register
+app.post('/', (req, res)=>{
+    //insert the record to the database
+    UsersModel.create(req.body)
+    .then(users => res.json(users))
+    .catch(err => res.json(err));
+});
+
+//route for login
+app.post('/login', (req, res)=>{
+    const {email, password} = req.body;
+    UsersModel.findOne({email: email})
+    .then(user =>{
+        //if user email exist, validate the password
+        if(user){
+            if(user.password === password){
+                res.json(user);
+            }else{
+                res.json('Password is incorrect');
+            }
+        }else{
+            res.json('No record existed');
+        }
+    })
+    .catch(err => console.log(err));
+});
 
 //instantiate the socket.io
 const io = new Server(server, {

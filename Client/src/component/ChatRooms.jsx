@@ -16,10 +16,7 @@ const ChatRooms = (props) =>{
     const [selectedRoom, setSelectedRoom] = useState('');
     const [selectedRoomName, setSelectedRoomName] = useState(''); 
     const [isAdmin, setIsAdmin] = useState(true);
-    const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-    const [roomToDelete, setRoomToDelete] = useState('');
-    let name = sessionStorage.getItem('name');
-   
+    const [deleteConfirmation, setDeleteConfirmation] = useState(false);   
 
     //listen to event and update the chatRooms state 
     useEffect(() => {
@@ -42,6 +39,7 @@ const ChatRooms = (props) =>{
             setSelectedRoom(props.roomSelected);
         };   
     },[props.roomSelected]);
+
     useEffect(()=>{
         if(props.user){
             setCurrentUser(props.user);
@@ -52,14 +50,13 @@ const ChatRooms = (props) =>{
     const createRoom = (e) =>{
         e.preventDefault();
         //emit create room to the client and passing room name
-        socket.emit('createRoom', {id: roomID, name: room, date: date, user:name});
+        socket.emit('createRoom', {id: roomID, name: room, date: date, user:currentUser});
         setRoom('');
     };
 
     // Function to remove a chat room
     const removeRoom = (roomId, name) => {
-        setRoomToDelete(roomId);
-        if(currentUser === name){
+        if(selectedRoom === roomId && currentUser === name){
             setDeleteConfirmation(true);
         }else{
             setIsAdmin(false);
@@ -83,7 +80,7 @@ const ChatRooms = (props) =>{
         setSelectedRoom(roomId);
         setSelectedRoomName(roomName);
     };
-    
+
     return(
         <>
         <div className="Chat_History_header">
@@ -99,7 +96,7 @@ const ChatRooms = (props) =>{
                     </div>
                     <div className="delete_notification_message">
                         <h4>Error</h4>
-                        <h6>Only the creator an delete the room.</h6>
+                        <h6>Only the creator can delete the room.</h6>
                     </div>
                 </div>
             }

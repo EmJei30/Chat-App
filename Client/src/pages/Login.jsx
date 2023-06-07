@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from 'react-router-dom';
+import axios from 'axios';
 import '../stylesheets/Login.css';
 
 const Login = () =>{
@@ -18,27 +19,37 @@ const Login = () =>{
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Perform login logic using email and password
-        const users = JSON.parse(localStorage.getItem('users'));
-        const user = users.find((user) => user.email === email && user.password === password);
+
+        axios.post('http://localhost:3001/login', {email, password})
+        .then(result => { 
+            console.log(result);
+                if (result.data === "Password is incorrect") {
+                    setNotification('Password is incorrect!!');
+                    setIsError(false);
+                    setInterval(() => {
+                        setNotification('');
+                    }, 2000);
+
+                }else if (result.data === "No record existed") {
+                    setNotification('No record existed!!');
+                    setIsError(false);
+                    setInterval(() => {
+                        setNotification('');
+                    }, 2000);
+
+                } else {
+                    setIsError(true);
+                    setNotification('Login successfull !!');
+                    setInterval(() => {
+                        navigate('/chat');  
+                        setNotification('');     
+                    }, 2000);
+
+                    sessionStorage.setItem('username',result.data.username); 
+                }
+        })
+        .catch(err => console.log(err));
     
-        if (user) {
-            setIsError(true);
-            setNotification('Login successfull !!');
-            setInterval(() => {
-                navigate('/chat');  
-                setNotification('');     
-            }, 2000);
-        
-        sessionStorage.setItem('name',user.name); 
-        } else {
-            setNotification('Invalid credentials !!');
-            setIsError(false);
-            setInterval(() => {
-                setNotification('');
-            }, 2000);
-          
-        }
         // Reset the form
         setEmail('');
         setPassword('');
@@ -52,11 +63,11 @@ const Login = () =>{
             <form onSubmit={handleSubmit}>
                 <div className="email_con">
                     <div className="email_label"><label>Email:</label></div>
-                    <div className="email_input"><input type="email" value={email} onChange={handleEmailChange} required/></div>
+                    <div className="email_input"><input type="email" value={email} onChange={handleEmailChange} name = "email" required/></div>
                 </div>
                 <div className="password_input">
                     <div className="pass_label"><label>Password:</label></div>
-                    <div className="pass_input"><input type="password" value={password} onChange={handlePasswordChange} required/></div>
+                    <div className="pass_input"><input type="password" value={password} onChange={handlePasswordChange} name = "password" required/></div>
                 </div>
                 <div className="signUpBtn" >Doesn't have an account ?
                     <Link to="/" className="signUp"> Sign Up</Link>
