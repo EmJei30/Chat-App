@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import Active_List from './Active_List';
 import ChatRooms from './ChatRooms';
 import ScrollToBottom from 'react-scroll-to-bottom';
@@ -8,32 +8,33 @@ import io from 'socket.io-client';
 const socket = io.connect('http://localhost:3001');
 
 const Chat = () => {
+    const location = useLocation ();
+    const navigate = useNavigate();
     const time = new Date().toLocaleTimeString();
     const [conversations, setConversations] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const [user, setUser] = useState('');
+    const [userName, setUserName] = useState('');
+    const [userId, setUserId] = useState('');
     const [roomSelected, setRoomSelected] = useState('');
     const [roomSelectedName, setRoomSelectedName] = useState('');
     const [rooms, setRooms]= useState([]);
     const [notification, setNotification] = useState('');
     const [avatar, setAvatar] = useState('');
     const [currentRoomUsers, setCurrentRoomUsers] = useState([]);
-    const navigate = useNavigate();
-    
-    useEffect(()=>{
-        let name = sessionStorage.getItem('username');
-        let id = Math.floor(Math.random() * 5) + 1;
-        if(name === "" || name === null){
-            navigate('/login');   
-        }else{
-            setUser(name);
-            setAvatar(`/images/${id}.png`);
-        };
-    },[]);
+    const userinfo = location.state?.data;
 
     useEffect(()=>{
-        socket.emit('join',user, avatar );
-    }, [user, avatar]);
+        let id = Math.floor(Math.random() * 5) + 1;
+        setAvatar(`/images/${id}.png`);
+    },[]);
+    useEffect(()=>{
+        setUserName(userinfo.username);
+        setUserId(userinfo._id)
+    },[userinfo]);
+
+    useEffect(()=>{
+        socket.emit('join',userName, avatar );
+    }, [userName, avatar]);
     
     //use to check if the current room selected is still existing
     useEffect(()=>{
@@ -46,7 +47,7 @@ const Chat = () => {
     //join the room on the component mount and and when the room id is update
     useEffect(()=>{
         if(roomSelected){
-            socket.emit('joinRoom', roomSelected, user, avatar);
+            socket.emit('joinRoom', roomSelected, userName, avatar);
         };
         
         socket.on('usersInRoom', (currentRoomUsers)=>{
@@ -75,7 +76,7 @@ const Chat = () => {
             socket.off('notification');
             socket.off('usersInRoom');
             if(roomSelected){
-                socket.emit('leaveRoom', roomSelected, user);
+                socket.emit('leaveRoom', roomSelected, userName);
             }
         };
     },[roomSelected]);
@@ -83,20 +84,20 @@ const Chat = () => {
     //function to send a message
     const sendMessage = (e) =>{
         e.preventDefault();
-        socket.emit('message', {roomId: roomSelected, msg: newMessage, user: user, time: time});
+        socket.emit('message', {roomId: roomSelected, msg: newMessage, user: userName, time: time});
         setNewMessage('');
     };
 
     //funtion that handles log out
     const handleLogOut = () =>{
         sessionStorage.setItem('username',""); 
-        socket.emit('leaveRoom', roomSelected, user);
+        socket.emit('leaveRoom', roomSelected, userName);
         navigate('/login');
         window.location.reload();   
     };
     //function for leaving room
     const handleLeaveRoom = () =>{
-        socket.emit('leaveRoom', roomSelected, user);
+        socket.emit('leaveRoom', roomSelected, userName);
         setRoomSelected(null);
     };
     //hanlde data recieved from child component
@@ -105,12 +106,11 @@ const Chat = () => {
             setRoomSelectedName(data.roomName);
             setRooms(data.chatRooms);
     };
-
-    return (
+    return (    
     <>
         <div className='container'>
             <div className='chat_history'>
-                <ChatRooms sendData = {handleData} roomSelected = {roomSelected} user = {user}/>
+                <ChatRooms sendData = {handleData} roomSelected = {roomSelected} user = {userName} userId = {userId}/>
             </div>
             <div className='chat'>
                 <div className='chat_header'>
@@ -118,7 +118,7 @@ const Chat = () => {
                         <img src = {avatar} alt =''/>
                     </div>
                     <div className="chat_name">
-                        {user}    
+                        {userName}
                     </div>
                     <div className='option'>
                         <button type="submit" onClick={handleLeaveRoom}>Leave Room</button>
@@ -135,7 +135,7 @@ const Chat = () => {
                             {notification && <div className='notification'>{notification}</div>}
                             <ScrollToBottom className='scroll'>
                                 {conversations.map((message, index)=>(
-                                        <div className={`message ${user === message.user ? 'sender':''}`} key = {index}>
+                                        <div className={`message ${userName === message.user ? 'sender':''}`} key = {index}>
                                             <div className='userContainert'>
                                                 <p className='user'>{message.user}</p>
                                             </div>
@@ -161,7 +161,7 @@ const Chat = () => {
                 <div className='welcome'>
                     <div className='welcome_msg'>
                         <div>
-                            <h1>Welcome {user}</h1> 
+                            <h1>Welcome {userName}</h1> 
                             <h3>Join the chat now</h3> 
                             <h3>or you can create your own chat room.</h3> 
                         </div>            
@@ -173,7 +173,7 @@ const Chat = () => {
                 }
             </div>
             <div className='contact_list'>
-                <Active_List  user = {user} roomSelected = {roomSelected} currentRoomUsers = {currentRoomUsers}/>
+                <Active_List  userId ={userId} userName = {userName} roomSelected = {roomSelected} currentRoomUsers = {currentRoomUsers}/>
             </div>
         </div>
     </>

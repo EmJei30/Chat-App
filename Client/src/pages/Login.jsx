@@ -3,11 +3,12 @@ import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import '../stylesheets/Login.css';
 
-const Login = () =>{
+const Login = (props) =>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [Notification, setNotification] = useState('');
     const [isError, setIsError] = useState(null);
+    const [userInfo, setUserInfo] = useState([]);
     const navigate = useNavigate();
 
     const handleEmailChange = (e) => {
@@ -22,7 +23,6 @@ const Login = () =>{
 
         axios.post('http://localhost:3001/login', {email, password})
         .then(result => { 
-            console.log(result);
                 if (result.data === "Password is incorrect") {
                     setNotification('Password is incorrect!!');
                     setIsError(false);
@@ -38,14 +38,16 @@ const Login = () =>{
                     }, 2000);
 
                 } else {
+                    const data = result.data;
                     setIsError(true);
                     setNotification('Login successfull !!');
                     setInterval(() => {
-                        navigate('/chat');  
+                        navigate('/chat',{ state: { data } });  
                         setNotification('');     
                     }, 2000);
 
                     sessionStorage.setItem('username',result.data.username); 
+                    
                 }
         })
         .catch(err => console.log(err));
@@ -54,7 +56,7 @@ const Login = () =>{
         setEmail('');
         setPassword('');
     };
-    
+   
     return (
         <div className="Login">
             <div className="header">

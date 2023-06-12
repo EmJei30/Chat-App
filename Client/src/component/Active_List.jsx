@@ -3,15 +3,17 @@ import '../stylesheets/Active_List.css';
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:3001');
 
-const Active_List = ({user, roomSelected, currentRoomUsers}) =>{
+const Active_List = ({userId, userName, roomSelected, currentRoomUsers}) =>{
     const [newUser, setNewUser] = useState('');
+    const [newUserId, setNewUserId] = useState('');
     const [activeUsers, setActiveUsers]= useState([]);
     const [selectedRoom, setSelectedRoom] = useState('');
     const [roomUsers, setRoomUsers] = useState([]);
   
     useEffect(()=>{
-        setNewUser(user);
-    },[user]);
+        setNewUser(userName);
+        setNewUserId(userId);
+    },[userName, userId]);
 
     useEffect(()=>{
         setSelectedRoom(roomSelected);

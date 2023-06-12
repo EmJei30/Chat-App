@@ -91,7 +91,8 @@ io.on('connection', (socket)=>{
             id: currentRoomId,
             name: data.name,
             date: data.date,
-            user: data.user
+            user: data.user,
+            usersId: data.usersId
         };
         chatRooms.push(newRoom);
 

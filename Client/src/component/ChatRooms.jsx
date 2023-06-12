@@ -12,6 +12,7 @@ const ChatRooms = (props) =>{
     const [room, setRoom] = useState('');
     const [chatRooms, setChatRooms] = useState([]);
     const [currentUser, setCurrentUser] = useState('');
+    const [currentUserID, setCurrentUserId] = useState('');
     const [roomID, setRoomID] = useState(0);
     const [selectedRoom, setSelectedRoom] = useState('');
     const [selectedRoomName, setSelectedRoomName] = useState(''); 
@@ -41,22 +42,23 @@ const ChatRooms = (props) =>{
     },[props.roomSelected]);
 
     useEffect(()=>{
-        if(props.user){
+        if(props.user && props.userId){
             setCurrentUser(props.user);
+            setCurrentUserId(props.userId);
         };   
-    },[props.user]);
+    },[props.user, props.userId]);
 
     //funtion trigger when form submit / creating new room
     const createRoom = (e) =>{
         e.preventDefault();
         //emit create room to the client and passing room name
-        socket.emit('createRoom', {id: roomID, name: room, date: date, user:currentUser});
+        socket.emit('createRoom', {id: roomID, name: room, date: date, user:currentUser, usersId: currentUserID});
         setRoom('');
     };
 
     // Function to remove a chat room
-    const removeRoom = (roomId, name) => {
-        if(selectedRoom === roomId && currentUser === name){
+    const removeRoom = (roomId, roomUsersId) => {
+        if(selectedRoom === roomId && currentUserID === roomUsersId){
             setDeleteConfirmation(true);
         }else{
             setIsAdmin(false);
@@ -80,7 +82,7 @@ const ChatRooms = (props) =>{
         setSelectedRoom(roomId);
         setSelectedRoomName(roomName);
     };
-
+console.log(chatRooms);
     return(
         <>
         <div className="Chat_History_header">
@@ -115,7 +117,7 @@ const ChatRooms = (props) =>{
                             </div>
                             <div className={`delete ${selectedRoom === room.id ? 'show':'hide'}`}>
                                 {!deleteConfirmation &&
-                                    <img src = {icon} onClick={()=>removeRoom(room.id, room.user)} />  
+                                    <img src = {icon} onClick={()=>removeRoom(room.id, room.usersId)} />  
                                 }
                                 {deleteConfirmation &&
                                     <div className="confimation_con">
